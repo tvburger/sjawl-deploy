@@ -1,0 +1,24 @@
+<project>
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>net.tvburger.sjawl</groupId>
+    <artifactId>sjawl-deploy</artifactId>
+    <version>0.1.0</version>
+
+    <packaging>pom</packaging>
+    <name>Standard Java Deployment Library</name>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+    </properties>
+
+    <modules>
+        <module>api</module>
+        <module>local</module>
+        <module>example</module>
+    </modules>
+
+</project>

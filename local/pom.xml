@@ -1,0 +1,23 @@
+<project>
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>net.tvburger.sjawl</groupId>
+        <artifactId>sjawl-deploy</artifactId>
+        <version>0.1.0</version>
+    </parent>
+
+    <artifactId>sjawl-deploy-local</artifactId>
+
+    <name>Sjawl :: Deployment :: Local</name>
+
+    <dependencies>
+        <dependency>
+            <groupId>net.tvburger.sjawl</groupId>
+            <artifactId>sjawl-deploy-api</artifactId>
+            <version>0.1.0</version>
+        </dependency>
+    </dependencies>
+
+</project>
