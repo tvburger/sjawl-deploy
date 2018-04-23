@@ -2,25 +2,19 @@ package net.tvburger.sjawl.deploy;
 
 public class DeployException extends Exception {
 
-    private final Object service;
-
-    public DeployException(Object service) {
-        this.service = service;
+    public DeployException() {
     }
 
-    public DeployException(String message, Object service) {
+    public DeployException(String message) {
         super(message);
-        this.service = service;
     }
 
-    public DeployException(String message, Throwable cause, Object service) {
+    public DeployException(String message, Throwable cause) {
         super(message, cause);
-        this.service = service;
     }
 
-    public DeployException(Throwable cause, Object service) {
+    public DeployException(Throwable cause) {
         super(cause);
-        this.service = service;
     }
 
 }

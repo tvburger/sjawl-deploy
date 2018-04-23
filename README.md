@@ -22,9 +22,9 @@ When your code is in need for Service Discovery, or needs Worker Coordination, t
     administrator.registerServiceType(HelloService.class, DeploymentStrategyProvider.getFirstAvailableStrategy());
     
     // Register your service implementation    
-    ServiceRegistry registry = context.getServiceRegistry();
-    registry.registerService(HelloService.class, new EnglishHelloService(), LanguageSpecification.Factory.create("EN"));
-    registry.registerService(HelloService.class, new FrenchHelloService(), LanguageSpecification.Factory.create("FR"));
+    ServiceRegistry proxyServiceRegistry = context.getServiceRegistry();
+    proxyServiceRegistry.registerService(HelloService.class, new EnglishHelloService(), LanguageSpecification.Factory.create("EN"));
+    proxyServiceRegistry.registerService(HelloService.class, new FrenchHelloService(), LanguageSpecification.Factory.create("FR"));
     
     // Obtain the service from the client code
     ServiceProvider provider = context.getServiceProvider();
@@ -48,7 +48,7 @@ When your code is in need for Service Discovery, or needs Worker Coordination, t
     DeploymentContext context = LocalDeploymentContext.Factory.create();
     
     // Register your type of work
-    WorkersAdministrator administrator = context.getWorkerAdministrator();
+    WorkersAdministrator administrator = context.getWorkersAdministrator();
     administrator.registerWorkerType(TestWorker.class, DeploymentStrategyProvider.getActiveActiveStrategy());
     
     // Deploy workers

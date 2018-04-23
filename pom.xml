@@ -7,6 +7,7 @@
     <version>0.2.0</version>
 
     <packaging>pom</packaging>
+
     <name>Standard Java Deployment Library</name>
 
     <properties>
@@ -18,6 +19,9 @@
     <modules>
         <module>api</module>
         <module>local</module>
+        <module>remote</module>
+        <module>protocol</module>
+        <module>zookeeper</module>
         <module>example</module>
     </modules>
 

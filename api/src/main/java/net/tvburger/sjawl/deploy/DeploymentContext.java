@@ -18,6 +18,6 @@ public interface DeploymentContext {
 
     WorkerDeployer getWorkerDeployer();
 
-    WorkersAdministrator getWorkerAdministrator();
+    WorkersAdministrator getWorkersAdministrator();
 
 }
