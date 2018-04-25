@@ -1,11 +1,11 @@
 package net.tvburger.sjawl.deploy.protocol.server;
 
 import net.tvburger.sjawl.deploy.DeployException;
-import net.tvburger.sjawl.deploy.local.worker.AbstractWorker;
+import net.tvburger.sjawl.deploy.admin.ServiceRegistration;
+import net.tvburger.sjawl.deploy.local.LocalServicesStore;
 import net.tvburger.sjawl.deploy.protocol.RequestDTO;
 import net.tvburger.sjawl.deploy.protocol.ResponseDTO;
-import net.tvburger.sjawl.deploy.remote.service.ServiceRegistrationRegistry;
-import net.tvburger.sjawl.deploy.service.ServiceRegistration;
+import net.tvburger.sjawl.deploy.utils.ManagedWorker;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -16,14 +16,14 @@ import java.net.Socket;
 import java.util.concurrent.BlockingQueue;
 
 // TODO: don't use a TCP connection for just a single request...
-public final class RequestHandler extends AbstractWorker {
+public final class RequestHandler extends ManagedWorker {
 
     private final BlockingQueue<Socket> connectionQueue;
-    private final ServiceRegistrationRegistry registry;
+    private final LocalServicesStore store;
 
-    public RequestHandler(BlockingQueue<Socket> connectionQueue, ServiceRegistrationRegistry registry) {
+    public RequestHandler(BlockingQueue<Socket> connectionQueue, LocalServicesStore store) {
         this.connectionQueue = connectionQueue;
-        this.registry = registry;
+        this.store = store;
     }
 
     @Override
@@ -35,7 +35,7 @@ public final class RequestHandler extends AbstractWorker {
             out = new ObjectOutputStream(socket.getOutputStream());
             ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
             RequestDTO request = (RequestDTO) in.readObject();
-            ServiceRegistration<?> serviceRegistration = registry.getServiceRegistration(request.getServiceRegistrationId());
+            ServiceRegistration<?> serviceRegistration = store.getServiceRegistration(request.getServiceRegistrationId());
             response = invokeCall(serviceRegistration.getServiceInstance(), request);
         } catch (IOException | DeployException | ClassNotFoundException cause) {
             response = new ResponseDTO(false, cause);

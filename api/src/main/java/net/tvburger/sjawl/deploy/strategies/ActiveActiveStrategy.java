@@ -1,7 +1,7 @@
 package net.tvburger.sjawl.deploy.strategies;
 
-import net.tvburger.sjawl.deploy.worker.WorkerDeployment;
-import net.tvburger.sjawl.deploy.worker.WorkerDeploymentStrategy;
+import net.tvburger.sjawl.deploy.WorkerDeploymentStrategy;
+import net.tvburger.sjawl.deploy.admin.WorkerDeployment;
 
 import java.util.Collection;
 

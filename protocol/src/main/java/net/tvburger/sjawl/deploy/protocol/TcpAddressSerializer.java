@@ -1,7 +1,7 @@
 package net.tvburger.sjawl.deploy.protocol;
 
 import net.tvburger.sjawl.deploy.DeployException;
-import net.tvburger.sjawl.deploy.remote.AddressSerializer;
+import net.tvburger.sjawl.deploy.remote.protocol.AddressSerializer;
 
 import java.io.IOException;
 import java.net.InetAddress;

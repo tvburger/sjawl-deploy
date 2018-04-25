@@ -1,12 +1,9 @@
 package net.tvburger.sjawl.deploy;
 
-import net.tvburger.sjawl.deploy.service.ServiceProvider;
-import net.tvburger.sjawl.deploy.service.ServiceRegistry;
-import net.tvburger.sjawl.deploy.service.ServicesAdministrator;
-import net.tvburger.sjawl.deploy.worker.WorkerDeployer;
-import net.tvburger.sjawl.deploy.worker.WorkersAdministrator;
+import net.tvburger.sjawl.deploy.admin.ServicesAdministrator;
+import net.tvburger.sjawl.deploy.admin.WorkersAdministrator;
 
-public interface DeploymentContext {
+public interface DeploymentContext extends AutoCloseable {
 
     String getDeploymentId();
 
@@ -19,5 +16,8 @@ public interface DeploymentContext {
     WorkerDeployer getWorkerDeployer();
 
     WorkersAdministrator getWorkersAdministrator();
+
+    @Override
+    void close() throws DeployException;
 
 }

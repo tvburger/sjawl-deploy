@@ -1,10 +1,10 @@
 package net.tvburger.sjawl.deploy.example;
 
-import net.tvburger.sjawl.deploy.service.ServiceFilter;
-import net.tvburger.sjawl.deploy.service.ServiceProperties;
 import net.tvburger.sjawl.config.MissingSettingException;
 import net.tvburger.sjawl.config.impl.DecoratedSpecification;
 import net.tvburger.sjawl.config.impl.MapSpecification;
+import net.tvburger.sjawl.deploy.ServiceFilter;
+import net.tvburger.sjawl.deploy.ServiceProperties;
 
 import java.util.Collections;
 

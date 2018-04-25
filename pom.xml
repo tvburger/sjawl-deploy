@@ -18,6 +18,7 @@
 
     <modules>
         <module>api</module>
+        <module>utils</module>
         <module>local</module>
         <module>remote</module>
         <module>protocol</module>

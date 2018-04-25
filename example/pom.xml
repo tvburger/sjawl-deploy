@@ -21,7 +21,19 @@
         </dependency>
         <dependency>
             <groupId>net.tvburger.sjawl</groupId>
-            <artifactId>sjawl-deploy-local</artifactId>
+            <artifactId>sjawl-deploy-protocol</artifactId>
+            <version>0.2.0</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>net.tvburger.sjawl</groupId>
+            <artifactId>sjawl-deploy-zookeeper</artifactId>
+            <version>0.2.0</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>net.tvburger.sjawl</groupId>
+            <artifactId>sjawl-deploy-utils</artifactId>
             <version>0.2.0</version>
             <scope>test</scope>
         </dependency>

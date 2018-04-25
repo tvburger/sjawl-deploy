@@ -18,6 +18,11 @@
             <artifactId>sjawl-deploy-api</artifactId>
             <version>0.2.0</version>
         </dependency>
+        <dependency>
+            <groupId>net.tvburger.sjawl</groupId>
+            <artifactId>sjawl-deploy-utils</artifactId>
+            <version>0.2.0</version>
+        </dependency>
     </dependencies>
 
 </project>

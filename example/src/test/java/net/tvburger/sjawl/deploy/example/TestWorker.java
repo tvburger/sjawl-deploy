@@ -1,8 +1,8 @@
 package net.tvburger.sjawl.deploy.example;
 
-import net.tvburger.sjawl.deploy.local.worker.AbstractWorker;
+import net.tvburger.sjawl.deploy.utils.ManagedWorker;
 
-public class TestWorker extends AbstractWorker {
+public class TestWorker extends ManagedWorker {
 
     private final String message;
 

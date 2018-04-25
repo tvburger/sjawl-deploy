@@ -45,7 +45,7 @@ When your code is in need for Service Discovery, or needs Worker Coordination, t
 
 ```
     // Obtain a DeploymentContext
-    DeploymentContext context = LocalDeploymentContext.Factory.create();
+    DeploymentContext context = DefaultDeploymentContext.Factory.create();
     
     // Register your type of work
     WorkersAdministrator administrator = context.getWorkersAdministrator();

@@ -1,7 +1,7 @@
 package net.tvburger.sjawl.deploy.strategies;
 
-import net.tvburger.sjawl.deploy.service.ServiceFilter;
-import net.tvburger.sjawl.deploy.service.ServiceRegistration;
+import net.tvburger.sjawl.deploy.ServiceFilter;
+import net.tvburger.sjawl.deploy.admin.ServiceRegistration;
 
 import java.util.Collection;
 

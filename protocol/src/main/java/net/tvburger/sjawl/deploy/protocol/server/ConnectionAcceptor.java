@@ -1,19 +1,23 @@
 package net.tvburger.sjawl.deploy.protocol.server;
 
-import net.tvburger.sjawl.deploy.local.worker.AbstractWorker;
+import net.tvburger.sjawl.deploy.DeployException;
+import net.tvburger.sjawl.deploy.protocol.TcpAddress;
+import net.tvburger.sjawl.deploy.utils.ManagedWorker;
 
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.concurrent.BlockingQueue;
 
-public final class ConnectionAcceptor extends AbstractWorker {
+public final class ConnectionAcceptor extends ManagedWorker {
 
-    private final ServerSocket serverSocket;
+    private final TcpAddress address;
     private final BlockingQueue<Socket> connectionQueue;
 
-    public ConnectionAcceptor(ServerSocket serverSocket, BlockingQueue<Socket> connectionQueue) {
-        this.serverSocket = serverSocket;
+    private ServerSocket serverSocket;
+
+    public ConnectionAcceptor(TcpAddress address, BlockingQueue<Socket> connectionQueue) {
+        this.address = address;
         this.connectionQueue = connectionQueue;
     }
 
@@ -23,6 +27,15 @@ public final class ConnectionAcceptor extends AbstractWorker {
             connectionQueue.add(serverSocket.accept());
         } catch (IOException cause) {
             Thread.sleep(100);
+        }
+    }
+
+    @Override
+    public void activate() throws DeployException {
+        try {
+            serverSocket = new ServerSocket(address.getPort(), 10, address.getInetAddress());
+        } catch (IOException cause) {
+            throw new DeployException(cause);
         }
     }
 
