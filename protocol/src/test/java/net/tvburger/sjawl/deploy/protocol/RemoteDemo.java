@@ -12,8 +12,11 @@ import net.tvburger.sjawl.deploy.protocol.client.SiteConnectionProvider;
 import net.tvburger.sjawl.deploy.protocol.client.TcpSiteConnectionProvider;
 import net.tvburger.sjawl.deploy.protocol.server.ConnectionAcceptor;
 import net.tvburger.sjawl.deploy.protocol.server.RequestHandler;
+import net.tvburger.sjawl.deploy.remote.RemoteProvider;
+import net.tvburger.sjawl.deploy.remote.impl.RemoteStateSiteRegistry;
 import net.tvburger.sjawl.deploy.strategies.DeploymentStrategyProvider;
 import net.tvburger.sjawl.deploy.utils.ManagedWorker;
+import net.tvburger.sjawl.deploy.zookeeper.ZooKeeperStoreProvider;
 
 import java.io.IOException;
 import java.net.InetAddress;
@@ -26,21 +29,26 @@ public class RemoteDemo {
 
     private final LocalDeploymentContext serverContext = LocalDeploymentContext.Factory.create();
     private final LocalServicesStore store = new DefaultLocalServicesStore();
+    private final TcpAddress address = new TcpAddress(InetAddress.getLoopbackAddress(), 8081);
 
     public void demo() throws Exception {
         try {
             initServer();
 
-            UUID serviceId = UUID.randomUUID();
-            ServiceRegistration<?> serviceRegistration = new ServiceRegistration<>(serviceId, HelloService.class, new HelloServiceImpl(), null);
-
+            UUID serviceRegistrationId = UUID.randomUUID();
+            ServiceRegistration<?> serviceRegistration = new ServiceRegistration<>(serviceRegistrationId, HelloService.class, new HelloServiceImpl(), null);
             store.addServiceType(HelloService.class, DeploymentStrategyProvider.getFirstAvailableStrategy());
             store.addServiceRegistration(serviceRegistration);
+
+
             UUID siteId = UUID.randomUUID();
+            RemoteProvider<TcpAddress> remoteProvider = ZooKeeperStoreProvider.Factory.get("test", false).create(new TcpAddressSerializer());
+            RemoteStateSiteRegistry<TcpAddress> registry = new RemoteStateSiteRegistry<>(remoteProvider.getRemoteSitesStore());
+            registry.init(siteId, address);
 
             SiteConnectionProvider<TcpAddress> provider = new TcpSiteConnectionProvider();
-            ObjectStreamServiceProxyFactory<TcpAddress> factory = new ObjectStreamServiceProxyFactory<>(null, provider);
-            HelloService helloService = factory.createServiceProxy(HelloService.class, siteId, serviceId);
+            ObjectStreamServiceProxyFactory<TcpAddress> factory = new ObjectStreamServiceProxyFactory<>(registry, provider);
+            HelloService helloService = factory.createServiceProxy(HelloService.class, siteId, serviceRegistrationId);
 
             System.out.println(helloService.sayHello());
             System.out.println(helloService.sayHello("John"));
@@ -56,7 +64,6 @@ public class RemoteDemo {
     }
 
     private void initServer() throws DeployException, IOException {
-        TcpAddress address = new TcpAddress(InetAddress.getLoopbackAddress(), 8081);
         BlockingQueue<Socket> socketQueue = new LinkedBlockingQueue<>();
 
         WorkersAdministrator administrator = serverContext.getWorkersAdministrator();
@@ -65,6 +72,8 @@ public class RemoteDemo {
 
         WorkerDeployer deployer = serverContext.getWorkerDeployer();
         deployer.deployWorker(ConnectionAcceptor.class, new ConnectionAcceptor(address, socketQueue), ManagedWorker.Activator.Singleton.get());
+        deployer.deployWorker(RequestHandler.class, new RequestHandler(socketQueue, store), ManagedWorker.Activator.Singleton.get());
+        deployer.deployWorker(RequestHandler.class, new RequestHandler(socketQueue, store), ManagedWorker.Activator.Singleton.get());
         deployer.deployWorker(RequestHandler.class, new RequestHandler(socketQueue, store), ManagedWorker.Activator.Singleton.get());
     }
 

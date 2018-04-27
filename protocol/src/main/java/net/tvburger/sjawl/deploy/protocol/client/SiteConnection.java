@@ -64,8 +64,8 @@ public final class SiteConnection<A> implements AutoCloseable {
         return address;
     }
 
-    public Object performRemoteCall(UUID serviceRegistration, Method method, Object[] args) throws IOException, InvocationTargetException {
-        RequestDTO request = new RequestDTO(serviceRegistration, method.getName(), method.getParameterTypes(), args);
+    public Object performRemoteCall(UUID serviceRegistrationId, Method method, Object[] args) throws IOException, InvocationTargetException {
+        RequestDTO request = new RequestDTO(serviceRegistrationId, method.getName(), method.getParameterTypes(), args);
         try {
             objectSocket.getOut().writeObject(request);
             objectSocket.getOut().flush();

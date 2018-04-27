@@ -35,14 +35,21 @@ public final class TcpSiteConnectionProvider implements SiteConnectionProvider<T
     public void resetConnection(SiteConnection<TcpAddress> connection) throws IOException {
         synchronized (connections) {
             TcpAddress address = connection.getAddress();
-            connection.close();
             connections.remove(address);
+            try {
+                connection.close();
+            } catch (IOException cause) {
+            }
         }
     }
 
     private SiteConnection<TcpAddress> setupNewConnection(TcpAddress address) throws IOException {
-        Socket socket = new Socket(address.getInetAddress(), address.getPort());
-        return new SiteConnection<>(address, SiteConnection.ObjectSocket.create(socket));
+        try {
+            Socket socket = new Socket(address.getInetAddress(), address.getPort());
+            return new SiteConnection<>(address, SiteConnection.ObjectSocket.create(socket));
+        } catch (IOException cause) {
+            throw new IOException("Failed to setup connection to: " + address, cause);
+        }
     }
 
 }

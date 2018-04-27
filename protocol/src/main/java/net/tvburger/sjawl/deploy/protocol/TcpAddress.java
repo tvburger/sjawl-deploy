@@ -22,4 +22,9 @@ public final class TcpAddress implements Address {
         return port;
     }
 
+    @Override
+    public String toString() {
+        return String.format("TcpAddress(%s:%d)", getInetAddress().toString(), getPort());
+    }
+
 }

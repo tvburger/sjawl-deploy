@@ -18,6 +18,11 @@
             <artifactId>sjawl-deploy-remote</artifactId>
             <version>0.2.0</version>
         </dependency>
+        <dependency>
+            <groupId>org.apache.zookeeper</groupId>
+            <artifactId>zookeeper</artifactId>
+            <version>3.4.11</version>
+        </dependency>
     </dependencies>
 
 </project>

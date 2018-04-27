@@ -20,7 +20,7 @@ public final class ObjectStreamServiceProxyFactory<A extends Address> implements
     }
 
     @Override
-    public <T> T createServiceProxy(Class<T> serviceTypeClass, UUID siteId, UUID serviceId) {
+    public <T> T createServiceProxy(Class<T> serviceTypeClass, UUID siteId, UUID serviceRegistrationId) {
         if (!serviceTypeClass.isInterface()) {
             throw new IllegalArgumentException("Must be an interface!");
         }
@@ -28,7 +28,7 @@ public final class ObjectStreamServiceProxyFactory<A extends Address> implements
             throw new IllegalArgumentException("We refuse to proxy a proxy!");
         }
         AssertUtil.assertNotNull(siteId);
-        AssertUtil.assertNotNull(serviceId);
+        AssertUtil.assertNotNull(serviceRegistrationId);
         Class<?>[] parentInterface = serviceTypeClass.getInterfaces();
         Class<?>[] interfaces = new Class<?>[parentInterface.length + 2];
         for (int i = 0; i < parentInterface.length; i++) {
@@ -40,7 +40,7 @@ public final class ObjectStreamServiceProxyFactory<A extends Address> implements
                 Proxy.newProxyInstance(
                         serviceTypeClass.getClassLoader(),
                         interfaces,
-                        new ObjectStreamServiceProxy<>(siteRegistry, provider, siteId, serviceId)));
+                        new ObjectStreamServiceProxy<>(siteRegistry, provider, siteId, serviceRegistrationId)));
     }
 
 }

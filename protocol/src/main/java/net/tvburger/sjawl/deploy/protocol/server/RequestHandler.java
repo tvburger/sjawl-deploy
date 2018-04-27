@@ -15,7 +15,6 @@ import java.lang.reflect.Method;
 import java.net.Socket;
 import java.util.concurrent.BlockingQueue;
 
-// TODO: don't use a TCP connection for just a single request...
 public final class RequestHandler extends ManagedWorker {
 
     private final BlockingQueue<Socket> connectionQueue;
@@ -30,7 +29,12 @@ public final class RequestHandler extends ManagedWorker {
     protected void performOneWorkUnit() throws InterruptedException {
         ObjectOutputStream out = null;
         ResponseDTO response = null;
-        Socket socket = connectionQueue.take();
+        Socket socket = null;
+        try {
+            socket = connectionQueue.take();
+        } catch (InterruptedException cause) {
+            return;
+        }
         try {
             out = new ObjectOutputStream(socket.getOutputStream());
             ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
@@ -43,11 +47,11 @@ public final class RequestHandler extends ManagedWorker {
             if (out != null && response != null) {
                 try {
                     out.writeObject(response);
+                    connectionQueue.put(socket);
                 } catch (IOException cause) {
-                } finally {
                     try {
                         socket.close();
-                    } catch (IOException cause) {
+                    } catch (IOException innerCause) {
                     }
                 }
             }
@@ -62,6 +66,16 @@ public final class RequestHandler extends ManagedWorker {
         } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException cause) {
             return new ResponseDTO(false, cause);
         }
+    }
+
+    @Override
+    public void deactivate() {
+        System.out.println("deactivate");
+    }
+
+    @Override
+    protected void stopped() throws DeployException {
+        System.out.println("stopped: " + this);
     }
 
 }

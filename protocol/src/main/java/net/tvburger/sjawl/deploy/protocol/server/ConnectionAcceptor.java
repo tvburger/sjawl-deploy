@@ -22,11 +22,14 @@ public final class ConnectionAcceptor extends ManagedWorker {
     }
 
     @Override
-    protected void performOneWorkUnit() throws InterruptedException {
+    protected void performOneWorkUnit() {
         try {
             connectionQueue.add(serverSocket.accept());
         } catch (IOException cause) {
-            Thread.sleep(100);
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException innerCause) {
+            }
         }
     }
 
@@ -41,10 +44,16 @@ public final class ConnectionAcceptor extends ManagedWorker {
 
     @Override
     public void deactivate() {
+        System.out.println("deactivate");
         try {
             serverSocket.close();
         } catch (IOException cause) {
         }
+    }
+
+    @Override
+    protected void stopped() throws DeployException {
+        System.out.println("stopped: " + this);
     }
 
 }

@@ -23,6 +23,12 @@
             <artifactId>sjawl-deploy-utils</artifactId>
             <version>0.2.0</version>
         </dependency>
+        <dependency>
+            <groupId>net.tvburger.sjawl</groupId>
+            <artifactId>sjawl-deploy-zookeeper</artifactId>
+            <version>0.2.0</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
 </project>

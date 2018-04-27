@@ -69,6 +69,7 @@ public abstract class ManagedWorker implements Runnable {
                 try {
                     performOneWorkUnit();
                 } catch (InterruptedException cause) {
+                    interrupted(cause);
                 }
             }
             stopped();
@@ -103,6 +104,9 @@ public abstract class ManagedWorker implements Runnable {
     }
 
     protected void stopped() throws DeployException {
+    }
+
+    protected void interrupted(InterruptedException source) throws DeployException {
     }
 
     protected abstract void performOneWorkUnit() throws InterruptedException;

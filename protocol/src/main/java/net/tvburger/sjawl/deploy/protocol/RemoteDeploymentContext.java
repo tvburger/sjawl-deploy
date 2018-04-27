@@ -33,7 +33,9 @@ public class RemoteDeploymentContext extends DecoratedDeploymentContext {
         }
 
         private static LocalDeploymentContext createServerContext(TcpAddress address, LocalServicesStore store) throws DeployException {
-            try (LocalDeploymentContext serverContext = LocalDeploymentContext.Factory.create(UUID.randomUUID().toString())) {
+            LocalDeploymentContext serverContext = null;
+            try {
+                serverContext = LocalDeploymentContext.Factory.create(UUID.randomUUID().toString());
                 BlockingQueue<Socket> socketQueue = new LinkedBlockingQueue<>();
 
                 WorkersAdministrator administrator = serverContext.getWorkersAdministrator();
@@ -48,6 +50,14 @@ public class RemoteDeploymentContext extends DecoratedDeploymentContext {
                 deployer.deployWorker(RequestHandler.class, new RequestHandler(socketQueue, store), ManagedWorker.Activator.Singleton.get());
 
                 return serverContext;
+            } catch (DeployException cause) {
+                if (serverContext != null) {
+                    try {
+                        serverContext.close();
+                    } catch (DeployException innerCause) {
+                    }
+                }
+                throw new DeployException("Failed to initialize server: " + cause.getMessage(), cause);
             }
         }
     }

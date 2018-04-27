@@ -52,13 +52,14 @@ public final class RemoteServiceRegistrationMapper {
         Class<T> serviceTypeClass = (Class<T>) serviceTypeMapper.toClass(remoteServiceRegistration.getServiceType());
         T serviceInstance;
         UUID serviceId = remoteServiceRegistration.getServiceId();
+        UUID serviceRegistrationId = remoteServiceRegistration.getRegistrationId();
         if (idToInstanceMap.containsKey(serviceId)) {
             serviceInstance = (T) idToInstanceMap.get(serviceId);
         } else if (isLocalService(remoteServiceRegistration)) {
             throw new DeployException("Can't find our own local service!");
         } else {
             UUID siteId = remoteServiceRegistration.getSiteId();
-            serviceInstance = serviceProxyFactory.createServiceProxy(serviceTypeClass, siteId, serviceId);
+            serviceInstance = serviceProxyFactory.createServiceProxy(serviceTypeClass, siteId, serviceRegistrationId);
             idToInstanceMap.put(serviceId, serviceInstance);
             instanceToIdMap.put(serviceInstance, serviceId);
         }

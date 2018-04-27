@@ -1,7 +1,7 @@
 package net.tvburger.sjawl.deploy.protocol.client;
 
-import net.tvburger.sjawl.deploy.remote.protocol.Address;
 import net.tvburger.sjawl.deploy.remote.impl.RemoteStateSiteRegistry;
+import net.tvburger.sjawl.deploy.remote.protocol.Address;
 import net.tvburger.sjawl.deploy.remote.protocol.ServiceProxyException;
 
 import java.io.IOException;
@@ -29,6 +29,9 @@ public final class ObjectStreamServiceProxy<A extends Address> implements Invoca
 
     @Override
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+        if (method.getDeclaringClass().equals(Object.class)) {
+            return method.invoke(this, args);
+        }
         Exception lastCause = null;
         for (int i = 0; i < NR_OR_RETRIES; i++) {
             SiteConnection<A> connection = null;
@@ -40,10 +43,10 @@ public final class ObjectStreamServiceProxy<A extends Address> implements Invoca
                 throw cause.getTargetException();
             } catch (Exception cause) {
                 try {
-                    System.err.println("Exception: " + cause.getMessage());
-                    cause.printStackTrace();
                     lastCause = cause;
-                    provider.resetConnection(connection);
+                    if (connection != null) {
+                        provider.resetConnection(connection);
+                    }
                 } catch (IOException innerCause) {
                     Thread.sleep(RETRY_DELAY);
                 }
