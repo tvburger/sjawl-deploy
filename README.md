@@ -62,8 +62,17 @@ When your code is in need for Service Discovery, or needs Worker Coordination, t
     administrator.unregisterWorkerType(TestWorker.class);
 ```
 
+
+## Distributed Services
+
+This contains distributed computing using ZooKeeper. The distributed module defines how you can register
+your own Site-to-Site protocol and Datastore technology.
+
+modules/{distributed,protocol,zookeeper}
+
 ## More Examples
 See: example/src/test/java/net/tvburger/sjawl/deploy/example/ExampleTest.java
+See: example/src/test/java/net/tvburger/sjawl/deploy/example/DistributedExampleTest.java
 
 
 # Contact
