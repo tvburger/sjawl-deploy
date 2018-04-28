@@ -20,7 +20,7 @@
         <module>api</module>
         <module>utils</module>
         <module>local</module>
-        <module>remote</module>
+        <module>distributed</module>
         <module>protocol</module>
         <module>zookeeper</module>
         <module>example</module>

@@ -36,9 +36,9 @@ public abstract class ManagedWorker implements Runnable {
                     throw new DeployException("Already active!");
                 }
                 workerInstance.callback = callback;
+                workerInstance.activate();
                 workerInstance.workerThread = new Thread(workerInstance);
                 workerInstance.workerThread.start();
-                workerInstance.activate();
             }
         }
 
@@ -72,9 +72,12 @@ public abstract class ManagedWorker implements Runnable {
                     interrupted(cause);
                 }
             }
-            stopped();
         } catch (DeployException cause) {
         } finally {
+            try {
+                stopped();
+            } catch (DeployException cause) {
+            }
             invokeCallback();
         }
     }

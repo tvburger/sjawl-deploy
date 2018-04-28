@@ -1,8 +1,8 @@
 package net.tvburger.sjawl.deploy.protocol.client;
 
-import net.tvburger.sjawl.deploy.remote.impl.RemoteStateSiteRegistry;
-import net.tvburger.sjawl.deploy.remote.protocol.Address;
-import net.tvburger.sjawl.deploy.remote.protocol.ServiceProxyException;
+import net.tvburger.sjawl.deploy.distributed.remote.impl.RemoteStoreSiteRegistry;
+import net.tvburger.sjawl.deploy.distributed.protocol.Address;
+import net.tvburger.sjawl.deploy.distributed.protocol.ServiceProxyException;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationHandler;
@@ -15,12 +15,12 @@ public final class ObjectStreamServiceProxy<A extends Address> implements Invoca
     private static final int NR_OR_RETRIES = 3;
     private static final int RETRY_DELAY = 1_000;
 
-    private final RemoteStateSiteRegistry<A> siteRegistry;
+    private final RemoteStoreSiteRegistry<A> siteRegistry;
     private final SiteConnectionProvider<A> provider;
     private final UUID siteId;
     private final UUID serviceRegistrationId;
 
-    public ObjectStreamServiceProxy(RemoteStateSiteRegistry<A> siteRegistry, SiteConnectionProvider<A> provider, UUID siteId, UUID serviceRegistrationId) {
+    public ObjectStreamServiceProxy(RemoteStoreSiteRegistry<A> siteRegistry, SiteConnectionProvider<A> provider, UUID siteId, UUID serviceRegistrationId) {
         this.siteRegistry = siteRegistry;
         this.provider = provider;
         this.siteId = siteId;

@@ -1,9 +1,9 @@
 package net.tvburger.sjawl.deploy.zookeeper;
 
 import net.tvburger.sjawl.deploy.DeployException;
-import net.tvburger.sjawl.deploy.remote.protocol.Address;
-import net.tvburger.sjawl.deploy.remote.protocol.AddressSerializer;
-import net.tvburger.sjawl.deploy.remote.RemoteSitesStore;
+import net.tvburger.sjawl.deploy.distributed.protocol.Address;
+import net.tvburger.sjawl.deploy.distributed.protocol.AddressSerializer;
+import net.tvburger.sjawl.deploy.distributed.remote.RemoteSitesStore;
 import org.apache.zookeeper.CreateMode;
 import org.apache.zookeeper.KeeperException;
 import org.apache.zookeeper.ZooDefs;

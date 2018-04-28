@@ -8,14 +8,14 @@
         <version>0.2.0</version>
     </parent>
 
-    <artifactId>sjawl-deploy-protocol</artifactId>
+    <artifactId>sjawl-deploy-distributed</artifactId>
 
-    <name>Sjawl :: Deployment :: Protocol</name>
+    <name>Sjawl :: Deployment :: Distributed</name>
 
     <dependencies>
         <dependency>
             <groupId>net.tvburger.sjawl</groupId>
-            <artifactId>sjawl-deploy-distributed</artifactId>
+            <artifactId>sjawl-deploy-local</artifactId>
             <version>0.2.0</version>
         </dependency>
         <dependency>

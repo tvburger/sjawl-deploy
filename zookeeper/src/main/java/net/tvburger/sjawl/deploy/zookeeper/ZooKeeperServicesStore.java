@@ -1,12 +1,13 @@
 package net.tvburger.sjawl.deploy.zookeeper;
 
 import net.tvburger.sjawl.deploy.DeployException;
-import net.tvburger.sjawl.deploy.remote.RemoteServiceRegistration;
-import net.tvburger.sjawl.deploy.remote.RemoteServicesStore;
-import net.tvburger.sjawl.deploy.remote.mappers.ObjectBytesMapper;
+import net.tvburger.sjawl.deploy.distributed.mappers.ObjectBytesMapper;
+import net.tvburger.sjawl.deploy.distributed.remote.RemoteServiceRegistration;
+import net.tvburger.sjawl.deploy.distributed.remote.RemoteServicesStore;
 import org.apache.zookeeper.CreateMode;
 import org.apache.zookeeper.KeeperException;
 import org.apache.zookeeper.ZooDefs;
+import org.apache.zookeeper.data.Stat;
 
 import java.io.IOException;
 import java.util.*;
@@ -53,7 +54,11 @@ public final class ZooKeeperServicesStore extends AbstractZooKeeperStore impleme
     @Override
     public void removeServiceType(String serviceTypeName) throws DeployException, IOException {
         try {
-            int version = getZooKeeper().exists(getServicePath(serviceTypeName), false).getVersion();
+            Stat svcStat = getZooKeeper().exists(getServicePath(serviceTypeName), false);
+            if (svcStat == null) {
+                throw new DeployException("Service type not registered: " + serviceTypeName);
+            }
+            int version = svcStat.getVersion();
             getZooKeeper().delete(getServicePath(serviceTypeName), version);
         } catch (InterruptedException | KeeperException cause) {
             throw new IOException(cause);
@@ -107,10 +112,18 @@ public final class ZooKeeperServicesStore extends AbstractZooKeeperStore impleme
     @Override
     public void removeServiceRegistration(UUID serviceRegistrationId) throws DeployException, IOException {
         try {
-            int regVersion = getZooKeeper().exists(getRegistrationPath(serviceRegistrationId), false).getVersion();
+            Stat regStat = getZooKeeper().exists(getRegistrationPath(serviceRegistrationId), false);
+            if (regStat == null) {
+                throw new DeployException("Service no longer registered: " + serviceRegistrationId);
+            }
+            int regVersion = regStat.getVersion();
             byte[] data = getZooKeeper().getData(getRegistrationPath(serviceRegistrationId), false, null);
             String serviceTypeName = mapper.toObject(data);
-            int svcVersion = getZooKeeper().exists(getServicePath(serviceTypeName, serviceRegistrationId), false).getVersion();
+            Stat svcStat = getZooKeeper().exists(getServicePath(serviceTypeName, serviceRegistrationId), false);
+            if (svcStat == null) {
+                throw new DeployException("Service type is not registered: " + serviceTypeName);
+            }
+            int svcVersion = svcStat.getVersion();
             getZooKeeper().delete(getServicePath(serviceTypeName, serviceRegistrationId), svcVersion);
             getZooKeeper().delete(getRegistrationPath(serviceRegistrationId), regVersion);
         } catch (InterruptedException | KeeperException cause) {

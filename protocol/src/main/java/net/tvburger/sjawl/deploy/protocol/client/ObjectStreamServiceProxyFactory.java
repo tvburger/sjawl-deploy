@@ -1,20 +1,20 @@
 package net.tvburger.sjawl.deploy.protocol.client;
 
 import net.tvburger.sjawl.common.AssertUtil;
-import net.tvburger.sjawl.deploy.remote.impl.RemoteStateSiteRegistry;
-import net.tvburger.sjawl.deploy.remote.protocol.Address;
-import net.tvburger.sjawl.deploy.remote.protocol.ServiceProxy;
-import net.tvburger.sjawl.deploy.remote.protocol.ServiceProxyFactory;
+import net.tvburger.sjawl.deploy.distributed.remote.impl.RemoteStoreSiteRegistry;
+import net.tvburger.sjawl.deploy.distributed.protocol.Address;
+import net.tvburger.sjawl.deploy.distributed.protocol.ServiceProxy;
+import net.tvburger.sjawl.deploy.distributed.protocol.ServiceProxyFactory;
 
 import java.lang.reflect.Proxy;
 import java.util.UUID;
 
 public final class ObjectStreamServiceProxyFactory<A extends Address> implements ServiceProxyFactory {
 
-    private final RemoteStateSiteRegistry<A> siteRegistry;
+    private final RemoteStoreSiteRegistry<A> siteRegistry;
     private final SiteConnectionProvider<A> provider;
 
-    public ObjectStreamServiceProxyFactory(RemoteStateSiteRegistry<A> siteRegistry, SiteConnectionProvider<A> provider) {
+    public ObjectStreamServiceProxyFactory(RemoteStoreSiteRegistry<A> siteRegistry, SiteConnectionProvider<A> provider) {
         this.siteRegistry = siteRegistry;
         this.provider = provider;
     }

@@ -1,6 +1,6 @@
 package net.tvburger.sjawl.deploy.protocol.client;
 
-import net.tvburger.sjawl.deploy.remote.protocol.Address;
+import net.tvburger.sjawl.deploy.distributed.protocol.Address;
 
 import java.io.IOException;
 
